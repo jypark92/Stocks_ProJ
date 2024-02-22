@@ -79,7 +79,7 @@ def past_stck(access_token2):
 
     div_peroid = ["20240217", "20230917", "20230423", "20221129", "20220705", "20220208", "20210908", "20210418"]
     div_peroid2 = ["20240217", "20230917", "20230423", "20221129","20220705","20220208"]
-    for code in code_list2:
+    for code in code_list:
         for day in div_peroid:
             response = requests.get(url_base + path, params=mak_data(code, day), headers=header)
             a = response.json()
