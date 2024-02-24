@@ -1,4 +1,9 @@
-# stck_pastdata_to_s3 코드
+# stck_nowdata_to_s3 code
+
+# 함수 구성
+# access_token3 : 접근 토큰 발급 
+# result_df : API 호출 / 데이터 수집 / 데이터프레임 타입으로 정리 후 JSON 파일로 리턴
+# s3_export : 기존에 s3에 있는 parquet 파일을 열고 New data(json 파일)을 받아 추가하고 다시 parquet 형태로 s3에 저장
 
 import json
 import requests
@@ -25,7 +30,7 @@ def Make_token():
     result = response.json()
     return result['access_token']
 
-def past_stck(access_token2):
+def now_stck(access_token2):
     url_base = "https://openapi.koreainvestment.com:9443"
     path = "/uapi/domestic-stock/v1/quotations/inquire-daily-itemchartprice"
     tr_id = "FHKST03010100"
@@ -44,10 +49,13 @@ def past_stck(access_token2):
     "267260", "128940", "034220", "021240", "029780", "271560", "005940", "071050", "000720", "035250"
     ]
 
-    code_list2 = ["005930", "000660", "373220"]
-    
-    current_date = datetime.now()
-    formatted_date = current_date.strftime("%Y%m%d")
+    header = {
+        "Content-Type": "application/json", 
+        "authorization": f"Bearer {access_token}",
+        "appkey": app_key,
+        "appsecret": app_secret,
+        "tr_id": tr_id
+    }
 
     data = {
     'stck_code': [],
@@ -60,10 +68,13 @@ def past_stck(access_token2):
     'created_by' : []
     }
 
+    current_date = datetime.now()
+    formatted_date = current_date.strftime("%Y%m%d")
+
     def mak_data(code,day):
         data2 = {
             "fid_cond_mrkt_div_code": "J",
-            "fid_input_date_1": "20210101",
+            "fid_input_date_1": day,
             "fid_input_date_2": day,
             "fid_input_iscd": code,
             "fid_org_adj_prc": "0",
@@ -71,50 +82,60 @@ def past_stck(access_token2):
         }
         return data2
 
-    header = {
-        "Content-Type": "application/json", 
-        "authorization": f"Bearer {access_token}",
-        "appkey": app_key,
-        "appsecret": app_secret,
-        "tr_id": tr_id
-    }
-
-    div_peroid = ["20240217", "20230917", "20230423", "20221129", "20220705", "20220208", "20210908", "20210418"]
-    div_peroid2 = ["20240217", "20230917", "20230423", "20221129","20220705","20220208"]
     for code in code_list:
-        for day in div_peroid:
-            response = requests.get(url_base + path, params=mak_data(code, day), headers=header)
-            a = response.json()
-            print(a)
-            for i in a.get('output2', []):
-                data['stck_code'].append(code)
-                data['stck_date'].append(i.get('stck_bsop_date', "0"))
-                data['stck_oppr'].append(i.get('stck_oprc', "0"))
-                data['stck_clpr'].append(i.get('stck_clpr', "0"))
-                data['stck_hipr'].append(i.get('stck_hgpr', "0"))
-                data['stck_lwpr'].append(i.get('stck_lwpr', "0"))
-                data['acml_vol'].append(i.get('acml_vol', "0"))
-                data['created_by'].append(formatted_date)
-                
+        response = requests.get(url_base + path, params=mak_data(code, formatted_date), headers=header)
+        a = response.json()['output2'][0]
+        print(a)
+        
+        data['stck_code'].append(code)
+        data['stck_oppr'].append(a.get('stck_oprc', "0"))
+        data['stck_clpr'].append(a.get('stck_clpr', "0"))
+        data['stck_hipr'].append(a.get('stck_hgpr', "0"))
+        data['stck_lwpr'].append(a.get('stck_lwpr', "0"))
+        data['acml_vol'].append(a.get('acml_vol', "0"))
+        data['created_by'].append(formatted_date)
+    
     df = pd.DataFrame(data)
     json_data = df.to_json()
     return json_data
 
-def dataTo_S3_func(json_data):
+def update_s3file(json_data):
+    # AWS 계정 액세스 키 및 지역 설정
     aws_access_key_id = 'AKIA4RRVVY55VLOTQLEM'
     aws_secret_access_key = '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'
     region_name = 'ap-northeast-2'
+    
+    # S3 버킷 및 파일 경로 설정
     s3_bucket = 'de-1-1-bucket'
     s3_folder = 'stock'
     s3_filename = 'rawdata_past.parquet'
 
     s3_path = f'{s3_folder}/{s3_filename}'
 
+    # AWS S3 클라이언트 생성
     s3_client = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key, region_name=region_name)
-    df = pd.read_json(json_data)
+    
+    # 기존 Parquet 파일을 S3에서 다운로드
+    with BytesIO() as data:
+        s3_client.download_fileobj(s3_bucket, s3_path, data)
+        data.seek(0)
+        df_existing = pd.read_parquet(data)
+    
+    # 새로운 JSON 데이터를 읽기
+    df_new = pd.read_json(json_data)
+    
+    # 새 데이터를 기존 DataFrame에 추가
+    df_updated = pd.concat([df_existing, df_new], ignore_index=True)
+    
+    # 새로운 데이터를 Parquet 형식으로 변환
     with BytesIO() as f:
-        df.to_parquet(f)
+        df_updated.to_parquet(f)
         f.seek(0)
+        
+        # 기존 파일 삭제
+        s3_client.delete_object(Bucket=s3_bucket, Key=s3_path)
+        
+        # 업데이트된 Parquet 파일을 S3에 업로드
         s3_client.upload_fileobj(f, s3_bucket, s3_path)
 
 default_args = {
@@ -128,13 +149,13 @@ default_args = {
 }
 
 dag = DAG(
-    'A_PastData_S3_RDS',
+    'A_NowData_S3_RDS',
     default_args=default_args,
     schedule_interval='@once', 
 )
 
 with DAG(
-    dag_id='B_PastData_S3_RDS',
+    dag_id='A_NowData_S3_RDS',
     start_date=datetime(2024, 2, 20),
     schedule_interval=None,
     catchup=False,
@@ -145,19 +166,14 @@ with DAG(
         python_callable=Make_token
     )
         result_df = PythonOperator(
-        task_id='past_stck',
-        python_callable=past_stck,
+        task_id='now_stck',
+        python_callable=now_stck,
         op_args=[access_token3.output]
     )
         s3_export = PythonOperator(
         task_id='dataTo_S3',
-        python_callable=dataTo_S3_func,
+        python_callable=update_s3file,
         op_args=[result_df.output]
     )
-
-# 함수 구성 
-# access_token3 : 접근 토큰 발급 
-# result_df : API 호출 / 데이터 수집 / 데이터프레임 타입으로 정리 후 JSON 파일로 리턴 
-# s3_export : json 파일을 받아 parquet 형태로 s3에 저장
 
 access_token3 >> result_df >> s3_export
