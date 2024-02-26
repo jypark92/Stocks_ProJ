@@ -77,4 +77,6 @@ with DAG(
         python_callable=dataTo_S3_func,
         op_args=[extract.output]
     ) 
+        
+extract >> s3_export
 
