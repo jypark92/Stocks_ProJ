@@ -15,7 +15,7 @@ jobs:
     - name: copy docker compose to ec2 server
       uses: appleboy/ssh-action@master
       with: 
-        host: ${{ secret.HOST }}
+        host: ${{ secrets.HOST }}
         username: ${{ sercrets.USERNAME }}
         key: ${{ secrets.KEY }}
         script: |
@@ -25,7 +25,7 @@ jobs:
     - name: ssh into ec2 server and run docker compose
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secret.HOST }}
+        host: ${{ secrets.HOST }}
         username: ${{ sercrets.USERNAME }}
         key: ${{ secrets.KEY }}
         script: |
