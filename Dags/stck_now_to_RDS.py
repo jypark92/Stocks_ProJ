@@ -14,7 +14,9 @@ bucket_name = 'de-1-1-bucket'
 
 def open_s3():
 
+
     s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key, region_name=region_name)
+
     conn = psycopg2.connect(
         host="de-1-1-database.ch4xfyi6stod.ap-northeast-2.rds.amazonaws.com",
         port="5432",
@@ -36,7 +38,9 @@ def open_s3():
 
         current_date = datetime.now()
         formatted_date = current_date.strftime("%Y%m%d")
-        file_key = f'stock4/date=20240304/result.parquet'
+
+        file_key = f'stock4/date={formatted_date}/result.parquet'
+        #file_key = f'stock4/date=20240304/result.parquet'
 
         obj = s3.get_object(Bucket=bucket_name, Key=file_key)
         df = pd.read_parquet(BytesIO(obj['Body'].read()))
@@ -48,6 +52,9 @@ def open_s3():
         df = df[df['stck_date'] != 0]
         df['stck_date'] = df['stck_date'].astype(str)
         df['stck_date'] = pd.to_datetime(df['stck_date'], format='%Y-%m-%d')
+        #df['stck_date'] = pd.to_datetime(df['stck_date'], format='%Y%m%d', errors='coerce').dt.date
+        #df['stck_date'].fillna(pd.NaT, inplace=True)
+        #df = df[df['stck_date'] != pd.NaT]
         data_list = [tuple(val for val in row) for _, row in df.iterrows()]
         cur.executemany(insert_query, data_list)
         conn.commit()
@@ -74,16 +81,10 @@ default_args = {
     'retry_delay': timedelta(minutes=3),
 }
 
-dag = DAG(
-    'stck_now_To_RDS',
-    default_args=default_args,
-    schedule_interval='@daily', 
-)
-
 with DAG(
     dag_id='stck_now_To_RDS',
     start_date=datetime(2024, 2, 20),
-    schedule_interval='0 18 15 * *',
+    schedule_interval='15 09 * * MON-FRI',
     catchup=False,
     default_args=default_args,
 ) as dag:

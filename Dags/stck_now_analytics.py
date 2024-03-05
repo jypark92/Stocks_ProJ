@@ -19,11 +19,11 @@ def ELT_nowdata():
             print("conn success")
         cur = conn.cursor()
 
-        formatted_time = datetime.datetime.now().strftime("%Y%m%d")
+        formatted_time = datetime.now().strftime("%Y%m%d")
 
         put_data_query = f"""
                             INSERT INTO analytics.stck (stck_date, stocks_item, stck_clpr, acml_vol)
-                            SELECT A.stck_date AS stck_date,
+                            SELECT DISTINCT A.stck_date AS stck_date,
                                     B.stocks_item AS stocks_item,
                                     A.stck_clpr AS stck_clpr,
                                     A.acml_vol AS acml_vol
@@ -50,23 +50,18 @@ def ELT_nowdata():
 default_args = {
     'owner' : 'airflow',
     'depends_on_past' : False,
-    'start_date' : datetime(2022,1,1),
     'email_on_failure' : False,
     'email_on_retry' : False,
     'retries' : 2,
     'retry_delay' : timedelta(minutes=3),
 }
 
-dag = DAG(
-    'stck_now_analytics',
-    default_args=default_args,
-    schedule_interval='@daily'
-)
+
 
 with DAG(
-    dag_id='stck_now_analytics',
-    start_date= datetime(2024,2,25),
-    schedule_interval='0 19 * * *',
+    dag_id='stck_now_ELT',
+    start_date = datetime(2024,3,4), 
+    schedule = '* 10 * * MON-FRI',  
     catchup=False,
     default_args=default_args,
 ) as dag:
