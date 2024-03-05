@@ -20,11 +20,6 @@ jobs:
         key: ${{ secrets.KEY }}
         port: 22
         script: |
-          cd /home/ubuntu
-          chmod 700 .ssh
-          chmod 600 .ssh/authorized_keys
-
-          cd ${{ secrets.AIRFLOW_PATH }}
           scp docker-compose.yaml ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/docker-compose.yaml
           scp -r dags ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/dags
           scp -r test ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/test
