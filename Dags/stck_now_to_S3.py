@@ -80,8 +80,6 @@ def now_stck(access_token2):
     for code in code_list:
         response = requests.get(url_base + path, params=mak_data(code, formatted_date, formatted_date), headers=header)
         a = response.json()
-        #print(a)
-
         for i in a.get('output2', []):
 
             data = data.append({
@@ -96,7 +94,6 @@ def now_stck(access_token2):
                 },ignore_index=True)
             
     df = pd.DataFrame(data)
-    #print(df)
     json_data = df.to_json() 
     return json_data
 
@@ -107,42 +104,22 @@ def dataTo_S3(json_data):
     try:        
 
         s3_client = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key, region_name=region_name)
-        
-        #print(df)
-        #df['stck_date'] = pd.to_datetime(df['stck_date'], format='%Y%m%d')
-        #print(df)
-        #grouped = df.groupby(df['stck_date'].dt.date)
-        #print(grouped)
+
         grouped = df.groupby(df['stck_date'])
-
-
         date_data = []
         
         for date, group in grouped:
-            
-            #print(date)
-            #print(group)
-
-
             if group.empty:
                 continue
             
             date_data.append(date)
             s3_path = f'stock4/date={str(date)}/result.parquet'
-            #print(s3_path)
 
             with BytesIO() as f:
                 group.to_parquet(f)
                 f.seek(0)
                 s3_client.upload_fileobj(f, s3_bucket, s3_path)
 
-        with BytesIO() as f:
-            gatherdate = pd.DataFrame({'date': date_data})
-            gatherdate.to_parquet(f)
-            f.seek(0)
-            s3_client.upload_fileobj(f, s3_bucket, f'stock4/gatherdate.parduet')
-
-        
         print("File uploaded successfully to S3.")
     
     except ClientError as e:

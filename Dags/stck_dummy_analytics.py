@@ -27,13 +27,12 @@ def ELT_dummydata():
                             );""" 
         put_data_query = """
                             INSERT INTO analytics.stck (stck_date, stocks_item, stck_clpr, acml_vol)
-                            SELECT A.stck_date AS stck_date,
+                            SELECT DISTINCT A.stck_date AS stck_date,
                                     B.stocks_item AS stocks_item,
                                     A.stck_clpr AS stck_clpr,
                                     A.acml_vol AS acml_vol
                             FROM raw_data.stck_raw4 A
                             JOIN raw_data.stocks_items B ON A.stck_code = CAST(B.ticker_symbol AS INT)
-                            WHERE A.stck_date != '0';
                         """
         
         try:
@@ -63,15 +62,15 @@ default_args = {
 }
 
 dag = DAG(
-    'stck_dummy_ELT',
+    'stck_dummy_analytics',
     default_args=default_args,
-    schedule_interval='@daily'
+    schedule_interval='@once'
 )
 
 with DAG(
-    dag_id='stck_dummy_ELT',
+    dag_id='stck_dummy_analytics',
     start_date= datetime(2024,2,25),
-    schedule_interval='0 19 * * *',
+    schedule_interval=None,
     catchup=False,
     default_args=default_args,
 ) as dag:

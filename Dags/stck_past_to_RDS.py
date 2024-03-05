@@ -14,7 +14,6 @@ bucket_name = 'de-1-1-bucket'
 
 def open_s3():
 
-
     s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key, region_name=region_name)
 
     conn = psycopg2.connect(
@@ -52,21 +51,15 @@ def open_s3():
             conn.rollback()
             print(f"Failed to create table: {e}")
 
-        print("Y")
-        
         insert_query = """INSERT INTO raw_data.stck_raw4 (stck_code, stck_date, stck_oppr, 
                                 stck_clpr, stck_hipr, stck_lwpr, acml_vol, created_by) 
                                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
 
         paginator = s3.get_paginator('list_objects')
-        print(paginator)
 
-        print("YY")
         for result in paginator.paginate(Bucket=bucket_name, Prefix='stock4'):
-            print("YYY")
-            print(result)
+
             for obj in result.get('Contents', []):
-                print("YYYY")
                 file_key = obj['Key']
                 if file_key.endswith('result.parquet'):
                     obj = s3.get_object(Bucket=bucket_name, Key=file_key)
@@ -79,9 +72,6 @@ def open_s3():
                     df = df[df['stck_date'] != 0]
                     df['stck_date'] = df['stck_date'].astype(str)
                     df['stck_date'] = pd.to_datetime(df['stck_date'], format='%Y-%m-%d')
-                    #df['stck_date'] = pd.to_datetime(df['stck_date'], format='%Y%m%d', errors='coerce').dt.date
-                    #df['stck_date'].fillna(pd.NaT, inplace=True)
-                    #df = df[df['stck_date'] != pd.NaT]
                     data_list = [tuple(val for val in row) for _, row in df.iterrows()]
                     cur.executemany(insert_query, data_list)
                     conn.commit()
