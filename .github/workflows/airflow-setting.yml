@@ -12,25 +12,23 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: copy docker compose to ec2 server
+    - name: copy docker compose to ec2 server and run docker compose
       uses: appleboy/ssh-action@master
       with: 
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
+        password: ${{ secrets.KEY }}
         port: 22
         script: |
+          cd /home/ubuntu
+          chmod 700 .ssh
+          chmod 600 .ssh/authorized_keys
+
+          cd ${{ secrets.AIRFLOW_PATH }}
           scp docker-compose.yaml ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/docker-compose.yaml
           scp -r dags ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/dags
           scp -r test ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/test
-    - name: ssh into ec2 server and run docker compose
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: 22
-        script: |
+
           cd ${{ secrets.AIRFLOW_PATH }}
           docker-compose down --rmi all
           docker-compose up -d
