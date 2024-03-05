@@ -29,7 +29,7 @@ def ELT_nowdata():
                                     A.acml_vol AS acml_vol
                             FROM raw_data.stck_raw4 A
                             JOIN raw_data.stocks_items B ON A.stck_code = CAST(B.ticker_symbol AS INT)
-                            WHERE A.stck_date != '0' and A.stck_date = %s;
+                            WHERE A.stck_date = %s;
                         """
         
         try:
