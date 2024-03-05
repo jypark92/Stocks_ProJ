@@ -15,9 +15,9 @@ jobs:
     - name: copy docker compose to ec2 server and run docker compose
       uses: appleboy/ssh-action@master
       with: 
+        key: ${{ secrets.KEY }}
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
         port: 22
         script: |
           scp docker-compose.yaml ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/docker-compose.yaml
