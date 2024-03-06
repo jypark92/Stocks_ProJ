@@ -20,7 +20,8 @@ jobs:
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          git remote set-url origin https://${{ secrets.USERNAME_GITHUB }}:${{ secrets.PASSWORD }}@github.com/jypark92/Stocks_ProJ.git
+          git config --global user.name=${{ secrets.USERNAME_GITHUB }}
+          git config --global user.email=${{ secrets.EMAIL }}
           git pull origin main
           
  
