@@ -20,11 +20,4 @@ jobs:
         username: ${{ secrets.USERNAME }}
         port: 22
         script: |
-          scp docker-compose.yaml ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/docker-compose.yaml
-          scp -r dags ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/dags
-          scp -r test ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/test
-
-          cd ${{ secrets.AIRFLOW_PATH }}
-          docker-compose down --rmi all
-          docker-compose up -d
-          docker exec ${{ secrets.AIRFLOW_FOLDER }}-airflow-scheduler-1 python -m unittest discover -s ${{ secrets.AIRFLOW_PATH }}/test/ -p 'test*.py'
+          whoami
