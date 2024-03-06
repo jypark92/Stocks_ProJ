@@ -29,8 +29,8 @@ jobs:
     - name: ssh into ec2 server and run docker compose
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secret.HOST }}
-        username: ${{ sercrets.USERNAME }}
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         script: |
           docker-compose down --rmi all
