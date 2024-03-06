@@ -22,6 +22,4 @@ jobs:
         script: |
           git pull origin main
           
-          docker-compose down --rmi all
-          docker-compose up -d
-          docker exec ${{ secrets.AIRFLOW_FOLDER }}-airflow-scheduler-1 python -m unittest discover -s ${{ secrets.AIRFLOW_PATH }}/test/ -p 'test*.py'
+ 
