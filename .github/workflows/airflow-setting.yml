@@ -14,11 +14,17 @@ jobs:
 
     - name: Install SSH
       run: sudo apt-get install openssh-client -y
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.KEY }}
+
     - name: copy docker compose to ec2 server
       run: |
-        scp -i ${{ secrets.KEY }} docker-compose.yaml ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/docker-compose.yaml
-        scp -r -i ${{ secrets.KEY }} Dags ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/dags
-        scp -r -i ${{ secrets.KEY }} test ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/test
+        scp docker-compose.yaml ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/docker-compose.yaml
+        scp -r Dags ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/dags
+        scp -r test ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/test
 
     - name: run docker compose
       uses: appleboy/ssh-action@master
