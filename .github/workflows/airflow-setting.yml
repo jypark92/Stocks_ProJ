@@ -20,7 +20,7 @@ jobs:
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          git remote set-url origin git@github.com:${{ secrets,USERNAME_GITHUB }}/Stocks_ProJ.git
+          git remote set-url origin git@github.com:${{ secrets.USERNAME_GITHUB }}/Stocks_ProJ.git
           git pull origin main
           
  
