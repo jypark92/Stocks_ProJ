@@ -22,6 +22,7 @@ jobs:
     - name: Copy files to remote server
       run: |
         cd ${{ github.workspace }}
+        scp -i ~/private-key.pem Dockerfile ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/Dockerfile
         scp -i ~/private-key.pem docker-compose.yaml ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/docker-compose.yaml
         scp -i ~/private-key.pem -r ./Dags/* ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/dags
         scp -i ~/private-key.pem -r ./test ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/test
