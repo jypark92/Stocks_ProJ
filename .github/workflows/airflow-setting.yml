@@ -20,4 +20,5 @@ jobs:
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          git config --list
+          git pull origin main
+          
