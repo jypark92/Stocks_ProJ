@@ -23,9 +23,19 @@ jobs:
       run: |
         cd ${{ github.workspace }}
         scp -i ~/private-key.pem docker-compose.yaml ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/docker-compose.yaml
-        scp -i ~/private-key.pem -r ./Dags ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/dags
+        scp -i ~/private-key.pem -r ./Dags/* ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/dags
         scp -i ~/private-key.pem -r ./test ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/test
-      
+    
+    - name: ssh into ec2 server and run docker compose
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secret.HOST }}
+        username: ${{ sercrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        script: |
+          docker-compose down --rmi all
+          docker-compose up -d
+          docker exec ${{ secrets.AIRFLOW_FOLDER }}-airflow-scheduler-1 python -m unittest discover -s ${{ secrets.AIRFLOW_PATH }}/test/ -p 'test*.py'
 
           
  
