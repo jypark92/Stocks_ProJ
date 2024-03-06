@@ -17,7 +17,7 @@ jobs:
         echo "${{ secrets.KEY }}" > ~/private-key.pem
         chmod 600 ~/private-key.pem
         mkdir -p ~/.ssh
-        ssh-keyscan ${{ secrets.REMOTE_HOST }} >> ~/.ssh/known_hosts
+        ssh-keyscan ${{ secrets.HOST }} >> ~/.ssh/known_hosts
 
     - name: Copy files to remote server
       run: |
