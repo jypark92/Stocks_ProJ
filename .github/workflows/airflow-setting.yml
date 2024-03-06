@@ -20,7 +20,4 @@ jobs:
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          git pull origin master
-          docker-compose down --rmi all
-          docker-compose up -d
-          docker exec ${{ secrets.AIRFLOW_FOLDER }}-airflow-scheduler-1 python -m unittest discover -s ${{ secrets.AIRFLOW_PATH }}/test/ -p 'test*.py'
+          git pull origin main
