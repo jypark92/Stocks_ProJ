@@ -36,7 +36,7 @@ jobs:
         script: |
           newgrp docker
           docker-compose down --rmi all
-          docker-compose up -d
+          docker-compose up -d --build
           docker exec airflow_airflow-scheduler_1 python -m unittest discover -s ${{ secrets.AIRFOW_DOCKER_PATH }}/test/ -p 'test*.py'
 
           
