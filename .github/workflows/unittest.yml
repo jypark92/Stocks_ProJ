@@ -26,7 +26,7 @@ jobs:
         scp -i ~/private-key.pem -r ./Dags/* ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/dags
         scp -i ~/private-key.pem -r ./test/* ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/test
     
-    - name: ssh into ec2 server and run docker compose
+    - name: ssh into ec2 server and unittest
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
