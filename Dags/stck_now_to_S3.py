@@ -8,18 +8,19 @@ import pandas as pd
 from io import StringIO, BytesIO
 import boto3
 from botocore.exceptions import ClientError
+from airflow.models import Variable
 
-app_key = "PS4WfYz9jA72Rkr00VUWH186hG5t5ub3DKgQ"
-app_secret = "SXm89J7z+net8nllTYL6EL6Dy1DZX/PAOAYLT1eLRc7hzYylB7iW0RGpKvSU9necFG1xcbtdFZrqcAI7/poMz3siCjsz0XpirAnl9W66EVo3jDhUMQhz06BzRTQlNZiLjb1zi0MNdeuzbiNkUPtaxbfX8ypT/S9nOSthwkbWCGyTLLp264Y="
+app_key = Variable.get("stck_app_key")
+app_secret = Variable.get("stck_app_sec")
 
 url_base = "https://openapi.koreainvestment.com:9443"
 path = "/uapi/domestic-stock/v1/quotations/inquire-daily-itemchartprice"
 tr_id = "FHKST03010100"
 
-aws_access_key_id = 'AKIA4RRVVY55VLOTQLEM'
-aws_secret_access_key = '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'
+aws_access_key_id = Variable.get("aws_id")
+aws_secret_access_key = Variable.get("aws_sec")
 region_name = 'ap-northeast-2'
-s3_bucket = 'de-1-1-bucket'
+s3_bucket = Variable.get("data_s3_bucket")
 
 code_list = [
     "005930", "000660", "373220", "207940", "005935", "005380", "000270", "068270", "005490", "051910",
@@ -80,7 +81,6 @@ def now_stck(access_token2):
     for code in code_list:
         response = requests.get(url_base + path, params=mak_data(code, formatted_date, formatted_date), headers=header)
         a = response.json()
-        #print(a)
 
         for i in a.get('output2', []):
 
@@ -107,42 +107,23 @@ def dataTo_S3(json_data):
     try:        
 
         s3_client = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key, region_name=region_name)
-        
-        #print(df)
-        #df['stck_date'] = pd.to_datetime(df['stck_date'], format='%Y%m%d')
-        #print(df)
-        #grouped = df.groupby(df['stck_date'].dt.date)
-        #print(grouped)
         grouped = df.groupby(df['stck_date'])
 
 
         date_data = []
         
         for date, group in grouped:
-            
-            #print(date)
-            #print(group)
-
 
             if group.empty:
                 continue
             
             date_data.append(date)
             s3_path = f'stock4/date={str(date)}/result.parquet'
-            #print(s3_path)
 
             with BytesIO() as f:
                 group.to_parquet(f)
                 f.seek(0)
                 s3_client.upload_fileobj(f, s3_bucket, s3_path)
-
-        #with BytesIO() as f:
-        #    gatherdate = pd.DataFrame({'date': date_data})
-        #    gatherdate.to_parquet(f)
-        #    f.seek(0)
-        #    s3_client.upload_fileobj(f, s3_bucket, f'stock4/gatherdate.parduet')
-
-        
         print("File uploaded successfully to S3.")
     
     except ClientError as e:
