@@ -33,4 +33,4 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         script: |
-          docker exec airflow_airflow-scheduler_1 python -m unittest discover -s ${{ secrets.AIRFLOW_PATH }}/test/ -p 'test*.py'
+          docker exec airflow_airflow-scheduler_1 python -m unittest discover -s ${{ secrets.AIRFOW_DOCKER_PATH }}/test/ -p 'test*.py'
