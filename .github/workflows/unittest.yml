@@ -1,10 +1,10 @@
-name: Airflow Setting CI
+name: Unittest CI
 
 on:
   push:
     paths: 
-      - 'test'
-      - 'Dags'
+      - 'test/*'
+      - 'Dags/*'
 
 jobs:
   build:
