@@ -34,8 +34,10 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         script: |
+          echo -e "AIRFLOW_UID=$(id -u)" > .env
           newgrp docker
           docker-compose down --rmi all
+          docker-compose up airflow-init
           docker-compose up -d 
 
 
