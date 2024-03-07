@@ -40,7 +40,7 @@ Data_Engineering DEV course 4th Project
     ![Image](https://github.com/MineTime23/Image/blob/master/ERD.png)
 
 ## 대시 보드
-    ![Image](https://github.com/MineTime23/Image/blob/master/%EC%A3%BC%EA%B0%80%20%EB%8C%80%EC%8B%9C%EB%B3%B4%EB%93%9C.png)
+    ![Image]([https://github.com/MineTime23/Image/blob/master/%EC%A3%BC%EA%B0%80%20%EB%8C%80%EC%8B%9C%EB%B3%B4%EB%93%9C.png](https://github.com/MineTime23/Image/blob/master/price%20dashboard.png))
     
     ![Image](https://github.com/MineTime23/Image/blob/master/%EA%B1%B0%EB%9E%98%EB%9F%89%20%EB%8C%80%EC%8B%9C%EB%B3%B4%EB%93%9C.png)
     ![Image](뉴스 대시보드.png)
