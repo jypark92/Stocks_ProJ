@@ -29,8 +29,8 @@ Data_Engineering DEV course 4th Project
    
   |이름||역할|기여도|
   | ---|---| ---| ---|
-  |박진영 |@jypark92 | 프로젝트 구조 설계, AWS 관리, CI/CD, UNIT TEST, DAG| 20%|
-  |이상진 |@MineTime23 | 데이터 프로세스(ETL) |20%|
+  |박진영 |@jypark92 | 프로젝트 구조 설계, AWS 관리, CI/CD, UNIT TEST, DAG| 50%|
+  |이상진 |@MineTime23 | 데이터 프로세스(ETL) |50%|
 
 ## 프로젝트 구현
 ### 구조
