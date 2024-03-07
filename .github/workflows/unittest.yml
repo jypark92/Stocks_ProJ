@@ -3,7 +3,8 @@ name: Airflow Setting CI
 on:
   push:
     paths: 
-      - 'docker-compose.yaml'
+      - 'test'
+      - 'Dags'
 
 jobs:
   build:
@@ -22,8 +23,8 @@ jobs:
     - name: Copy files to ec2
       run: |
         cd ${{ github.workspace }}
-        scp -i ~/private-key.pem Dockerfile ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/Dockerfile
-        scp -i ~/private-key.pem docker-compose.yaml ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/docker-compose.yaml
+        scp -i ~/private-key.pem -r ./Dags/* ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/dags
+        scp -i ~/private-key.pem -r ./test/* ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ secrets.AIRFLOW_PATH }}/test
     
     - name: ssh into ec2 server and run docker compose
       uses: appleboy/ssh-action@master
@@ -32,12 +33,4 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         script: |
-          echo -e "AIRFLOW_UID=$(id -u)" > .env
-          newgrp docker
-          docker-compose down --rmi all
-          docker-compose up airflow-init
-          docker-compose up -d 
-
-
-          
- 
+          docker exec ${{ secrets.AIRFLOW_FOLDER }}-airflow-scheduler-1 python -m unittest discover -s ${{ secrets.AIRFLOW_PATH }}/test/ -p 'test*.py'
