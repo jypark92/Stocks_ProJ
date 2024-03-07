@@ -3,6 +3,7 @@ from airflow.models import DagBag
 from dags import Exchange_Rate_to_S3 as ers
 from dags import News_to_Analytics as na
 
+
 class TestCases(unittest.TestCase):
     def setUp(self):
         self.dagbag = DagBag(include_examples=False)
