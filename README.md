@@ -24,8 +24,6 @@ Data_Engineering DEV course 4th Project
   | 금,구리,유가 데이터 | yfinance |
   | 환율 데이터 |  |
   | 뉴스 데이터 | 네이버 증권 뉴스 페이지 |
-  
- - 활용 데이터 : 주택 실거래 정보 공공 API
 
 ### 4. 팀원 역할 소개
    
