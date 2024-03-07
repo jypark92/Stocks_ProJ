@@ -9,7 +9,8 @@ RUN apt-get update && \
         openjdk-11-jdk \
         python3-dev \
         python3-pip \
-        curl
+        curl \
+    pip install pandas aiohttp pyarrow konlpy yfinance pymysql
 
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64    
 USER airflow
