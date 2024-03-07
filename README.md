@@ -40,9 +40,8 @@ Data_Engineering DEV course 4th Project
     ![Image](https://github.com/MineTime23/Image/blob/master/ERD.png)
 
 ## 대시 보드
-    ![Image](https://github.com/MineTime23/Image/blob/master/price%20dashboard.png)
-    ![Image](https://github.com/MineTime23/Image/blob/master/ERD.png)
-    ![Image](https://github.com/MineTime23/Image/blob/master/%EA%B1%B0%EB%9E%98%EB%9F%89%20%EB%8C%80%EC%8B%9C%EB%B3%B4%EB%93%9C.png)
-    ![Image](뉴스 대시보드.png)
-    ![Image](https://github.com/MineTime23/Image/blob/master/%EC%A3%BC%EC%8B%9D%20%EA%B2%BD%EC%A0%9C%20%EC%A7%80%ED%91%9C%20%EB%8C%80%EC%8B%9C%EB%B3%B4%EB%93%9C.png)
-    ![Image](https://github.com/MineTime23/Image/blob/master/%EA%B1%B0%EB%9E%98%EB%9F%89%20top10%20%EB%8C%80%EC%8B%9C%EB%B3%B4%EB%93%9C.png)
+  ![Image](https://github.com/MineTime23/Image/blob/master/price%20dashboard.png)
+  ![Image](https://github.com/MineTime23/Image/blob/master/finance%20dashboard.png)
+  ![Image](https://github.com/MineTime23/Image/blob/master/amount%20dashboard.png)
+  ![Image](https://github.com/MineTime23/Image/blob/master/news%20dashboard.png)
+  ![Image](https://github.com/MineTime23/Image/blob/master/top10%20dashboard.png)
