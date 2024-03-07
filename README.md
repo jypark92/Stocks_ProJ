@@ -20,7 +20,7 @@ Data_Engineering DEV course 4th Project
    
   | 데이터 | URL |
   |---|---|
-  | 주식 데이터 | https://apiportal.koreainvestment.com/apiservice/apiservice-domestic-stock-quotations#L_a08c3421-e50f-4f24-b1fe-64c12f723c77 (한국투자증권 API) |
+  | 주식 데이터 | https://apiportal.koreainvestment.com/apiservice/apiservice-domestic-stock-quotations#L_a08c3421-e50f-4f24-b1fe-64c12f723c77 |
   | 금,구리,유가 데이터 | yfinance |
   | 환율 데이터 |  |
   | 뉴스 데이터 | 네이버 증권 뉴스 페이지 |
