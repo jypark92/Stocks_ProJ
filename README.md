@@ -7,20 +7,21 @@ Data_Engineering DEV course 4th Project
 ## 프로젝트 개요
 
 ### 1. 내용
-주식 API, 환율 API, 자원(유가, 금, 구리) API, 
+시가총액 상위 100개 종목에 한해 2021/01/01 ~ 현재 데이터를 주식 API를 통해 주가 정보를 수집하고
+100개의 종목의 뉴스를 크롤링, 해당 기간 동안의 환율, 자원(유가, 금, 구리) 정보를 수집한 후,
+각 정보들의 상관관계를 시각화하는 프로젝트 입니다. 
 
 ### 2. 기간
   2024.02.12(월) ~ 2024.03.08(금)
 
-### 3. 기술스택
+### 3. 활용 데이터
    
-  | 분류 | 기술|
+  | 데이터 | URL |
   |---|---|
-  | 언어 |Python|
-  | 백엔드 |Django framework|
-  | 프론트엔드|Html, CSS|
-  | 라이브러리 | requests, pandas, folium, |
-  | 버전관리 및 협업 도구|Git, slack, gather, Zoom|
+  | 주식 데이터 | 한국투자증권 API https://apiportal.koreainvestment.com/apiservice/apiservice-domestic-stock-quotations#L_a08c3421-e50f-4f24-b1fe-64c12f723c77 |
+  | 금,구리,유가 데이터 | yfinance |
+  | 환율 데이터 |  |
+  | 뉴스 데이터 | 네이버 증권 뉴스 페이지 |
   
  - 활용 데이터 : 주택 실거래 정보 공공 API
 
