@@ -37,4 +37,4 @@ Data_Engineering DEV course 4th Project
 - 프로젝트 아키텍쳐
 
 - ERD
-
+    ![Image](https://github.com/MineTime23/Image/blob/master/ERD.png)
