@@ -5,23 +5,23 @@ from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 from io import BytesIO
 import boto3
+from airflow.models import Variable
 
-aws_access_key_id = 'AKIA4RRVVY55VLOTQLEM'
-aws_secret_access_key = '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'
+aws_access_key_id = Variable.get("aws_id")
+aws_secret_access_key = Variable.get("aws_sec")
 region_name = 'ap-northeast-2'
-bucket_name = 'de-1-1-bucket'
-
+bucket_name = Variable.get("data_s3_bucket")
 
 def open_s3():
 
     s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key, region_name=region_name)
 
     conn = psycopg2.connect(
-        host="de-1-1-database.ch4xfyi6stod.ap-northeast-2.rds.amazonaws.com",
-        port="5432",
+        host=Variable.get("rds_host"),
+        port=Variable.get("rds_port"),
         database="dev",
-        user="devde11",
-        password="Devde0101"
+        user=Variable.get("rds_user"),
+        password=Variable.get("rds_pw"),
     )
 
     try:

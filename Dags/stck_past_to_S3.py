@@ -8,18 +8,19 @@ import pandas as pd
 from io import StringIO, BytesIO
 import boto3
 from botocore.exceptions import ClientError
+from airflow.models import Variable
 
-app_key = "PS4WfYz9jA72Rkr00VUWH186hG5t5ub3DKgQ"
-app_secret = "SXm89J7z+net8nllTYL6EL6Dy1DZX/PAOAYLT1eLRc7hzYylB7iW0RGpKvSU9necFG1xcbtdFZrqcAI7/poMz3siCjsz0XpirAnl9W66EVo3jDhUMQhz06BzRTQlNZiLjb1zi0MNdeuzbiNkUPtaxbfX8ypT/S9nOSthwkbWCGyTLLp264Y="
+app_key = Variable.get("stck_app_key")
+app_secret = Variable.get("stck_app_sec")
 
 url_base = "https://openapi.koreainvestment.com:9443"
 path = "/uapi/domestic-stock/v1/quotations/inquire-daily-itemchartprice"
 tr_id = "FHKST03010100"
 
-aws_access_key_id = 'AKIA4RRVVY55VLOTQLEM'
-aws_secret_access_key = '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'
+aws_access_key_id = Variable.get("aws_id")
+aws_secret_access_key = Variable.get("aws_sec")
 region_name = 'ap-northeast-2'
-s3_bucket = 'de-1-1-bucket'
+s3_bucket = Variable.get("data_s3_bucket")
 
 code_list = [
     "005930", "000660", "373220", "207940", "005935", "005380", "000270", "068270", "005490", "051910",

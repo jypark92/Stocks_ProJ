@@ -2,14 +2,15 @@ import psycopg2
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
+from airflow.models import Variable
 
 def ELT_nowdata():
     conn = psycopg2.connect(
-        host="de-1-1-database.ch4xfyi6stod.ap-northeast-2.rds.amazonaws.com",
-        port="5432",
+        host=Variable.get("rds_host"),
+        port=Variable.get("rds_port"),
         database="dev",
-        user="devde11",
-        password="Devde0101"
+        user=Variable.get("rds_user"),
+        password=Variable.get("rds_pw"),
     )
 
     try:
