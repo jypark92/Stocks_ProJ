@@ -15,7 +15,8 @@ def get_PostgreSQL_connection():
 @task
 def create_table_and_load_data(schema, table, path):
     # Create CREATE TABLE SQL statement
-    create_table_sql = f"""CREATE TABLE IF NOT EXISTS {schema}.{table} (
+    create_table_sql = f"""DROP TABLE IF EXISTS {schema}.{table};
+                        CREATE TABLE  {schema}.{table} (
                                stocks_item varchar(32) not null,
                                ticker_symbol varchar(6) not null
                            );"""

@@ -63,7 +63,7 @@ def elt(raw_schema, schema, stock_items_tbl, stocks_tbl, exchange_tbl, oil_tbl, 
                             FROM {raw_schema}.{exchange_tbl}
                             WHERE symbol = 'USDKRW'
                             ) AS er
-                            ON sr.stck_date = CAST(to_char(er.date, 'YYYYMMDD') AS INT)
+                            ON sr.stck_date = er.date
                             JOIN {raw_schema}.{oil_tbl} AS o
                             ON er.date = o.date
                             JOIN {raw_schema}.{gold_tbl} AS g
@@ -92,7 +92,7 @@ with DAG(
     raw_schema = 'raw_data'
     schema = 'analytics'
     stock_items_tbl = 'stocks_items'
-    stocks_tbl = 'stck_raw'
+    stocks_tbl = 'stck_raw4'
     exchange_tbl = 'exchange_rate'
     oil_tbl = 'oil'
     gold_tbl = 'gold'
