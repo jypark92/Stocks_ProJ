@@ -101,7 +101,7 @@ with DAG(
     etl_operator = PythonOperator(
         task_id='etl',
         python_callable=etl,
-        op_kwargs={'schema': schema, 'table': table, 'end_date': today, 'start_date': '2024.02.24', 'folder': folder},
+        op_kwargs={'schema': schema, 'table': table, 'end_date': today, 'start_date': today, 'folder': folder},
         execution_timeout=timedelta(minutes=10)
     )
 

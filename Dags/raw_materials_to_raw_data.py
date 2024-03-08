@@ -109,8 +109,9 @@ with DAG(
     catchup = False
 ) as dag:
     category_list = ['gold', 'copper', 'oil']
-    start_date = '2021-01-01'
-    end_date = '2024-02-27'
+    now = datetime.now(timezone(timedelta(hours=9)))
+    start_date = str(now)[:10]
+    end_date = str(now + timedelta(days=1))[:10]
     schema = 'raw_data'
     
     records = extract(category_list, start_date, end_date)

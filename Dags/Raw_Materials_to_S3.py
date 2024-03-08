@@ -87,8 +87,9 @@ with DAG(
         'copper': 'HG=F', 
         'oil': 'CL=F'
     }
-    start_date = '2021-01-01'
-    end_date = '2024-02-27'
+    now = datetime.now(timezone(timedelta(hours=9)))
+    start_date = str(now)[:10]
+    end_date = str(now + timedelta(days=1))[:10]
 
     date_dict = transform(extract(symbol_dict, start_date, end_date))
     load(date_dict) >> trigger_task

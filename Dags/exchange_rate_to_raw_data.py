@@ -110,8 +110,9 @@ with DAG(
     schedule = '@once',
     catchup = False
 ) as dag:
-    start_date = '2024.02.24'
-    end_date = str(datetime.now(timezone(timedelta(hours=9))))[:10].replace("-", ".")
+    today = str(datetime.now(timezone(timedelta(hours=9))))[:10].replace("-", ".")
+    start_date = today
+    end_date = today
     schema = 'raw_data'
     table = 'exchange_rate'
     transform_data = transform(extract(start_date, end_date))
