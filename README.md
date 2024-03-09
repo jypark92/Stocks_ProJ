@@ -35,7 +35,7 @@ Data_Engineering DEV course 4th Project
 ## 프로젝트 구현
 ### 구조
 - 프로젝트 아키텍쳐
-
+    ![Image](https://github.com/MineTime23/Image/blob/master/Untitled%20(2).png)
 - ERD
     ![Image](https://github.com/MineTime23/Image/blob/master/ERD.png)
 
