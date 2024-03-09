@@ -22,7 +22,7 @@ Data_Engineering DEV course 4th Project
   |---|---|
   | 주식 데이터 | https://apiportal.koreainvestment.com/apiservice/apiservice-domestic-stock-quotations#L_a08c3421-e50f-4f24-b1fe-64c12f723c77 |
   | 금,구리,유가 데이터 | yfinance |
-  | 환율 데이터 |  네이버 페이 증권 웹페이지 |
+  | 환율 데이터 |  네이버 페이 증권 페이지 |
   | 뉴스 데이터 | 네이버 증권 뉴스 페이지 |
 
 ### 4. 팀원 역할 소개
